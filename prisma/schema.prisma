@@ -1,0 +1,138 @@
+// ============================================================
+// NEXORA AI - Prisma Schema
+// Database: PostgreSQL (Neon DB)
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ============================================================
+// ENUMS
+// ============================================================
+
+enum DemandLevel {
+  High
+  Medium
+  Low
+}
+
+enum MarketOutlook {
+  Positive
+  Neutral
+  Negative
+}
+
+// ============================================================
+// USER MODEL
+// ============================================================
+
+model User {
+  id          String   @id @default(uuid())
+  clerkUserId String   @unique
+  email       String   @unique
+  name        String?
+  imageUrl    String?
+  industry    String?
+  bio         String?  @db.Text
+  experience  Int?
+  skills      String[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  assessments  Assessment[]
+  resume       Resume?
+  coverLetters CoverLetter[]
+
+  @@map("users")
+}
+
+// ============================================================
+// INDUSTRY INSIGHTS MODEL
+// ============================================================
+
+model IndustryInsight {
+  id       String @id @default(uuid())
+  industry String @unique
+
+  salaryRanges Json
+  growthRate   Float
+  demandLevel  DemandLevel
+  topSkills    String[]
+
+  marketOutlook     MarketOutlook
+  keyTrends         String[]
+  recommendedSkills String[]
+
+  lastUpdated DateTime @default(now())
+  nextUpdate  DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("industry_insights")
+}
+
+// ============================================================
+// ASSESSMENT MODEL
+// ============================================================
+
+model Assessment {
+  id     String @id @default(uuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  quizScore      Float
+  questions      Json
+  category       String
+  improvementTip String @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("assessments")
+}
+
+// ============================================================
+// RESUME MODEL
+// ============================================================
+
+model Resume {
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  content String @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("resumes")
+}
+
+// ============================================================
+// COVER LETTER MODEL
+// ============================================================
+
+model CoverLetter {
+  id     String @id @default(uuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  content        String @db.Text
+  jobDescription String @db.Text
+  companyName    String
+  jobTitle       String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("cover_letters")
+}
