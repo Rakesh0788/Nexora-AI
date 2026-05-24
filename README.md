@@ -516,7 +516,7 @@ Built with these amazing open-source tools and services:
 Built by **Rakesh Gandrathi**
 
 - GitHub: [@Rakesh0788](https://github.com/Rakesh0788)
-- LinkedIn: [Rakesh Gandrathi](www.linkedin.com/in/rakesh-gandrathi-3b153b316)
+- LinkedIn: [Rakesh Gandrathi](https://www.linkedin.com/in/rakesh-gandrathi-3b153b316/)
 
 ---
 
